@@ -21,16 +21,16 @@ namespace WebApplication2.Controllers
         }
         public IActionResult Index()
         {
-            List<SE> results = _context.SE.Include(s => s.Session).Where(s => s.Session.DateTimeStart >= DateTime.Now.AddDays(-28)).Where(s => s.UserId == _userManager.GetUserId(User)).ToList();
-            List<Exercise> exercises = _context.Exercise.ToList();
+            List<Wallet> results = _context.SE.Include(s => s.Session).Where(s => s.Session.DateTimeStart >= DateTime.Now.AddDays(-28)).Where(s => s.UserId == _userManager.GetUserId(User)).ToList();
+            List<Crypto> exercises = _context.Exercise.ToList();
             List<Session> sessions = _context.Session.Where(s => s.DateTimeStart >= DateTime.Now.AddDays(-28)).Where(s => s.UserId == _userManager.GetUserId(User)).ToList();
-            List<Statistic> stats = new List<Statistic>();
+            List<Transaction> stats = new List<Transaction>();
             
-            foreach(Exercise ec in exercises)
+            foreach(Crypto ec in exercises)
             {
                 int numOfSessions = 0;
                 int bestResult = 0;
-                foreach(SE result in results)
+                foreach(Wallet result in results)
                 {
                     if(result.ExerciseId == ec.Id && result.SessionId != null)
                     {
@@ -43,7 +43,7 @@ namespace WebApplication2.Controllers
                 }
                 if (numOfSessions > 0)
                 {
-                    Statistic stat = new Statistic();
+                    Transaction stat = new Transaction();
                     stat.ExerciseName = ec.Name;
                     stat.NumOfSessions = numOfSessions;
                     stat.BestResult = bestResult;

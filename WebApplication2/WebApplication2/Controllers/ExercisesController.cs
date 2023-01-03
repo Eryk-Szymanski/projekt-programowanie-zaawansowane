@@ -60,7 +60,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Exercise exercise)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Crypto exercise)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Exercise exercise)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Crypto exercise)
         {
             if (id != exercise.Id)
             {

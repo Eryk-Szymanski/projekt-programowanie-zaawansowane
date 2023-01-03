@@ -2,11 +2,11 @@
 
 namespace WebApplication2.Models
 {
-    public class Session
-    {
-        public int Id { get; set; }
-        public DateTime DateTimeStart { get; set; }
-        public DateTime DateTimeEnd { get; set; }
+	public class Transaction
+	{
+		public string ExerciseName { get; set; }
+		public int NumOfSessions { get; set; }
+		public int BestResult { get; set; }
         public string? UserId { get; set; }
         public virtual IdentityUser? User { get; set; }
     }

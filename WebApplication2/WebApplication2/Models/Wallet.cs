@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.Models
 {
-    public class SE
+    public class Wallet
     {
         public int Id { get; set; }
         [Display(Name = "Ciężar")]
@@ -14,7 +14,7 @@ namespace WebApplication2.Models
         public int NumOfReps { get; set; }
         public int? ExerciseId { get; set; }
         [Display(Name = "Ćwiczenie")]
-        public virtual Exercise? Exercise { get; set; }
+        public virtual Crypto? Exercise { get; set; }
         public int? SessionId { get; set; }
         [Display(Name = "Sesja")]
         public virtual Session? Session { get; set; }

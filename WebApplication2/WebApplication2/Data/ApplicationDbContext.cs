@@ -10,8 +10,8 @@ namespace WebApplication2.Data
             : base(options)
         {
         }
-        public DbSet<WebApplication2.Models.Exercise> Exercise { get; set; }
+        public DbSet<WebApplication2.Models.Crypto> Exercise { get; set; }
         public DbSet<WebApplication2.Models.Session> Session { get; set; }
-        public DbSet<WebApplication2.Models.SE> SE { get; set; }
+        public DbSet<WebApplication2.Models.Wallet> SE { get; set; }
     }
 }
