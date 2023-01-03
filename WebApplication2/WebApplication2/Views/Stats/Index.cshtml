@@ -1,0 +1,32 @@
+﻿<h1>Statystki</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Ćwiczenie
+            </th>
+            <th>
+                Liczba sesji
+            </th>
+            <th>
+                Najelpszy wynik
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach(Statistic result in (List<Statistic>)ViewData["Stats"]) {
+        <tbody>
+            <tr>
+                <td>
+                    @result.ExerciseName
+                </td>
+                <td>
+                    @result.NumOfSessions
+                </td>
+                <td>
+                    @result.BestResult
+                </td>
+            </tr>
+        </tbody>
+    }
+</table>
