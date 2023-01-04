@@ -12,98 +12,91 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-    [Authorize]
-    public class SEsController : Controller
+    public class CryptosController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public SEsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CryptosController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: SEs
+        // GET: Cryptos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SE.Include(s => s.Exercise).Include(s => s.Session).Where(s => s.UserId == _userManager.GetUserId(User));
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.Crypto.ToListAsync());
         }
 
-        // GET: SEs/Details/5
+        // GET: Cryptos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Crypto == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE
-                .Include(s => s.Exercise)
-                .Include(s => s.Session)
+            var crypto = await _context.Crypto
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (sE == null)
+            if (crypto == null)
             {
                 return NotFound();
             }
 
-            return View(sE);
+            return View(crypto);
         }
 
-        // GET: SEs/Create
+        // GET: Cryptos/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name");
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart");
             return View();
         }
 
-        // POST: SEs/Create
+        // POST: Cryptos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Value")] Crypto crypto)
         {
-            sE.UserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                _context.Add(sE);
+                _context.Add(crypto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
-            return View(sE);
+            return View(crypto);
         }
 
-        // GET: SEs/Edit/5
+        // GET: Cryptos/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Crypto == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE.FindAsync(id);
-            if (sE == null)
+            var crypto = await _context.Crypto.FindAsync(id);
+            if (crypto == null)
             {
                 return NotFound();
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
-            return View(sE);
+            return View(crypto);
         }
 
-        // POST: SEs/Edit/5
+        // POST: Cryptos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Value")] Crypto crypto)
         {
-            if (id != sE.Id)
+            if (id != crypto.Id)
             {
                 return NotFound();
             }
@@ -112,12 +105,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(sE);
+                    _context.Update(crypto);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SEExists(sE.Id))
+                    if (!CryptoExists(crypto.Id))
                     {
                         return NotFound();
                     }
@@ -128,53 +121,49 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
-            return View(sE);
+            return View(crypto);
         }
 
-        // GET: SEs/Delete/5
+        // GET: Cryptos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Crypto == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE
-                .Include(s => s.Exercise)
-                .Include(s => s.Session)
+            var crypto = await _context.Crypto
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (sE == null)
+            if (crypto == null)
             {
                 return NotFound();
             }
 
-            return View(sE);
+            return View(crypto);
         }
 
-        // POST: SEs/Delete/5
+        // POST: Cryptos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.SE == null)
+            if (_context.Crypto == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.SE'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Exercise'  is null.");
             }
-            var sE = await _context.SE.FindAsync(id);
-            if (sE != null)
+            var crypto = await _context.Crypto.FindAsync(id);
+            if (crypto != null)
             {
-                _context.SE.Remove(sE);
+                _context.Crypto.Remove(crypto);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SEExists(int id)
+        private bool CryptoExists(int id)
         {
-          return _context.SE.Any(e => e.Id == id);
+          return _context.Crypto.Any(e => e.Id == id);
         }
     }
 }

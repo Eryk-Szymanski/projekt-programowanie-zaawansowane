@@ -12,89 +12,90 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-    [Authorize(Roles = "Admin")]
-
-    public class ExercisesController : Controller
+    [Authorize]
+    public class TransactionsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ExercisesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public TransactionsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: Exercises
+        // GET: Transactions
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Exercise.ToListAsync());
+            var transactions = _context.Transaction.Where(s => s.SenderId == _userManager.GetUserId(User) || s.RecipientId == _userManager.GetUserId(User));
+              return View(await transactions.ToListAsync());
         }
 
-        // GET: Exercises/Details/5
+        // GET: Transaction/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Exercise == null)
+            if (id == null || _context.Transaction == null)
             {
                 return NotFound();
             }
 
-            var exercise = await _context.Exercise
+            var transaction = await _context.Transaction
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (exercise == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return View(exercise);
+            return View(transaction);
         }
 
-        // GET: Exercises/Create
+        // GET: Transactions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Exercises/Create
+        // POST: Transactions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Crypto exercise)
+        public async Task<IActionResult> Create([Bind("Id,SenderWalletId,SenderId,RecipientWalletId,RecipientId,TransactionContent,Message")] Transaction transaction)
         {
+            transaction.SenderId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                _context.Add(exercise);
+                _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(exercise);
+            return View(transaction);
         }
 
-        // GET: Exercises/Edit/5
+        // GET: Transactions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Exercise == null)
+            if (id == null || _context.Transaction == null)
             {
                 return NotFound();
             }
 
-            var exercise = await _context.Exercise.FindAsync(id);
-            if (exercise == null)
+            var transaction = await _context.Transaction.FindAsync(id);
+            if (transaction == null)
             {
                 return NotFound();
             }
-            return View(exercise);
+            return View(transaction);
         }
 
-        // POST: Exercises/Edit/5
+        // POST: Sessions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Crypto exercise)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DateTimeStart,DateTimeEnd")] Session session)
         {
-            if (id != exercise.Id)
+            if (id != session.Id)
             {
                 return NotFound();
             }
@@ -103,12 +104,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(exercise);
+                    _context.Update(session);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ExerciseExists(exercise.Id))
+                    if (!SessionExists(session.Id))
                     {
                         return NotFound();
                     }
@@ -119,49 +120,49 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(exercise);
+            return View(session);
         }
 
-        // GET: Exercises/Delete/5
+        // GET: Sessions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Exercise == null)
+            if (id == null || _context.Session == null)
             {
                 return NotFound();
             }
 
-            var exercise = await _context.Exercise
+            var session = await _context.Session
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (exercise == null)
+            if (session == null)
             {
                 return NotFound();
             }
 
-            return View(exercise);
+            return View(session);
         }
 
-        // POST: Exercises/Delete/5
+        // POST: Sessions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Exercise == null)
+            if (_context.Session == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Exercise'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Session'  is null.");
             }
-            var exercise = await _context.Exercise.FindAsync(id);
-            if (exercise != null)
+            var session = await _context.Session.FindAsync(id);
+            if (session != null)
             {
-                _context.Exercise.Remove(exercise);
+                _context.Session.Remove(session);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ExerciseExists(int id)
+        private bool SessionExists(int id)
         {
-          return _context.Exercise.Any(e => e.Id == id);
+          return _context.Session.Any(e => e.Id == id);
         }
     }
 }

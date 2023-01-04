@@ -13,89 +13,97 @@ using WebApplication2.Models;
 namespace WebApplication2.Controllers
 {
     [Authorize]
-    public class SessionsController : Controller
+    public class WalletsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public SessionsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public WalletsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: Sessions
+        // GET: SEs
         public async Task<IActionResult> Index()
         {
-            var sessions = _context.Session.Where(s => s.UserId == _userManager.GetUserId(User));
-              return View(await sessions.ToListAsync());
+            var applicationDbContext = _context.SE.Include(s => s.Exercise).Include(s => s.Session).Where(s => s.UserId == _userManager.GetUserId(User));
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Sessions/Details/5
+        // GET: SEs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Session == null)
+            if (id == null || _context.SE == null)
             {
                 return NotFound();
             }
 
-            var session = await _context.Session
+            var sE = await _context.SE
+                .Include(s => s.Exercise)
+                .Include(s => s.Session)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (session == null)
+            if (sE == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(sE);
         }
 
-        // GET: Sessions/Create
+        // GET: SEs/Create
         public IActionResult Create()
         {
+            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name");
+            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart");
             return View();
         }
 
-        // POST: Sessions/Create
+        // POST: SEs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateTimeStart,DateTimeEnd")] Session session)
+        public async Task<IActionResult> Create([Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
         {
-            session.UserId = _userManager.GetUserId(User);
+            sE.UserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                _context.Add(session);
+                _context.Add(sE);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(session);
+            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
+            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
+            return View(sE);
         }
 
-        // GET: Sessions/Edit/5
+        // GET: SEs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Session == null)
+            if (id == null || _context.SE == null)
             {
                 return NotFound();
             }
 
-            var session = await _context.Session.FindAsync(id);
-            if (session == null)
+            var sE = await _context.SE.FindAsync(id);
+            if (sE == null)
             {
                 return NotFound();
             }
-            return View(session);
+            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
+            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
+            return View(sE);
         }
 
-        // POST: Sessions/Edit/5
+        // POST: SEs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateTimeStart,DateTimeEnd")] Session session)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
         {
-            if (id != session.Id)
+            if (id != sE.Id)
             {
                 return NotFound();
             }
@@ -104,12 +112,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(session);
+                    _context.Update(sE);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SessionExists(session.Id))
+                    if (!SEExists(sE.Id))
                     {
                         return NotFound();
                     }
@@ -120,49 +128,53 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(session);
+            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
+            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
+            return View(sE);
         }
 
-        // GET: Sessions/Delete/5
+        // GET: SEs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Session == null)
+            if (id == null || _context.SE == null)
             {
                 return NotFound();
             }
 
-            var session = await _context.Session
+            var sE = await _context.SE
+                .Include(s => s.Exercise)
+                .Include(s => s.Session)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (session == null)
+            if (sE == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(sE);
         }
 
-        // POST: Sessions/Delete/5
+        // POST: SEs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Session == null)
+            if (_context.SE == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Session'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.SE'  is null.");
             }
-            var session = await _context.Session.FindAsync(id);
-            if (session != null)
+            var sE = await _context.SE.FindAsync(id);
+            if (sE != null)
             {
-                _context.Session.Remove(session);
+                _context.SE.Remove(sE);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SessionExists(int id)
+        private bool SEExists(int id)
         {
-          return _context.Session.Any(e => e.Id == id);
+          return _context.SE.Any(e => e.Id == id);
         }
     }
 }
