@@ -13,9 +13,6 @@ namespace WebApplication2.Data
             : base(options)
         {
         }
-        public DbSet<WebApplication2.Models.Crypto> Crypto { get; set; }
-        public DbSet<WebApplication2.Models.Transaction> Transaction { get; set; }
-        public DbSet<WebApplication2.Models.Wallet> Wallet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +34,20 @@ namespace WebApplication2.Data
                 .Property(e => e.Cryptos)
                 .Metadata
                 .SetValueComparer(valueComparer);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(x => x.Sender)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(x => x.Recipient)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
+        public DbSet<WebApplication2.Models.Crypto> Crypto { get; set; }
+        public DbSet<WebApplication2.Models.Transaction> Transaction { get; set; }
+        public DbSet<WebApplication2.Models.Wallet> Wallet { get; set; }
     }
 }
