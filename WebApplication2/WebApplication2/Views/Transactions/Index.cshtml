@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication2.Models.Session>
+﻿@model IEnumerable<WebApplication2.Models.Transaction>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeStart)
+                @Html.DisplayNameFor(model => model.SenderWalletId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeEnd)
+                @Html.DisplayNameFor(model => model.RecipientWalletId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.RecipientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CryptoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CryptoQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
             </th>
             <th></th>
         </tr>
@@ -28,13 +37,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DateTimeStart)
+                @Html.DisplayNameFor(model => model.SenderWalletId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateTimeEnd)
+                @Html.DisplayNameFor(model => model.RecipientWalletId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
+                @Html.DisplayNameFor(model => model.RecipientId)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.CryptoId)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.CryptoQuantity)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Message)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -24,86 +24,77 @@ namespace WebApplication2.Controllers
             _userManager = userManager;
         }
 
-        // GET: SEs
+        // GET: Wallets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SE.Include(s => s.Exercise).Include(s => s.Session).Where(s => s.UserId == _userManager.GetUserId(User));
+            var applicationDbContext = _context.Wallet.Where(s => s.UserId == _userManager.GetUserId(User));
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: SEs/Details/5
+        // GET: Wallets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Wallet == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE
-                .Include(s => s.Exercise)
-                .Include(s => s.Session)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sE == null)
+            var wallet = await _context.Wallet.FirstOrDefaultAsync(m => m.Id == id);
+            if (wallet == null)
             {
                 return NotFound();
             }
 
-            return View(sE);
+            return View(wallet);
         }
 
-        // GET: SEs/Create
+        // GET: Wallets/Create
         public IActionResult Create()
         {
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name");
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart");
             return View();
         }
 
-        // POST: SEs/Create
+        // POST: Wallets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Wallet wallet)
         {
-            sE.UserId = _userManager.GetUserId(User);
+            wallet.UserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                _context.Add(sE);
+                _context.Add(wallet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
-            return View(sE);
+            return View(wallet);
         }
 
-        // GET: SEs/Edit/5
+        // GET: Wallets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Wallet == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE.FindAsync(id);
+            var sE = await _context.Wallet.FindAsync(id);
             if (sE == null)
             {
                 return NotFound();
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
             return View(sE);
         }
 
-        // POST: SEs/Edit/5
+        // POST: Wallets/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Weight,NumOfSeries,NumOfReps,ExerciseId,SessionId")] Wallet sE)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Wallet wallet)
         {
-            if (id != sE.Id)
+            if (id != wallet.Id)
             {
                 return NotFound();
             }
@@ -112,12 +103,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(sE);
+                    _context.Update(wallet);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SEExists(sE.Id))
+                    if (!WalletExists(wallet.Id))
                     {
                         return NotFound();
                     }
@@ -128,53 +119,49 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExerciseId"] = new SelectList(_context.Exercise, "Id", "Name", sE.ExerciseId);
-            ViewData["SessionId"] = new SelectList(_context.Session.Where(s => s.UserId == _userManager.GetUserId(User)), "Id", "DateTimeStart", sE.SessionId);
-            return View(sE);
+            return View(wallet);
         }
 
-        // GET: SEs/Delete/5
+        // GET: Wallets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.SE == null)
+            if (id == null || _context.Wallet == null)
             {
                 return NotFound();
             }
 
-            var sE = await _context.SE
-                .Include(s => s.Exercise)
-                .Include(s => s.Session)
+            var wallet = await _context.Wallet
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (sE == null)
+            if (wallet == null)
             {
                 return NotFound();
             }
 
-            return View(sE);
+            return View(wallet);
         }
 
-        // POST: SEs/Delete/5
+        // POST: Wallets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.SE == null)
+            if (_context.Wallet == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.SE'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Wallet'  is null.");
             }
-            var sE = await _context.SE.FindAsync(id);
-            if (sE != null)
+            var wallet = await _context.Wallet.FindAsync(id);
+            if (wallet != null)
             {
-                _context.SE.Remove(sE);
+                _context.Wallet.Remove(wallet);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SEExists(int id)
+        private bool WalletExists(int id)
         {
-          return _context.SE.Any(e => e.Id == id);
+          return _context.Wallet.Any(e => e.Id == id);
         }
     }
 }

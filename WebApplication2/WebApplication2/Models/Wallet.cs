@@ -9,9 +9,15 @@ namespace WebApplication2.Models
         [Display(Name = "Nazwa")]
         public string Name{ get; set; }
         [Display(Name = "Stan Portfela")]
-        public Dictionary<int, float>? Cryptos { get; set; }
+        public IList<StoredCrypto>? Cryptos { get; set; }
         [Display(Name = "Właściciel")]
         public string UserId { get; set; }
         public virtual IdentityUser User { get; set; }
+    }
+
+    public class StoredCrypto
+    {
+        public int Id { get; set; }
+        public float Quantity { get; set; }
     }
 }

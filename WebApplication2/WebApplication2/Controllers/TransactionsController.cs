@@ -60,7 +60,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SenderWalletId,SenderId,RecipientWalletId,RecipientId,TransactionContent,Message")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("Id,SenderWalletId,SenderId,RecipientWalletId,RecipientId,CryptoId,CryptoQuantity,Message")] Transaction transaction)
         {
             transaction.SenderId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
@@ -88,14 +88,14 @@ namespace WebApplication2.Controllers
             return View(transaction);
         }
 
-        // POST: Sessions/Edit/5
+        // POST: Transactions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateTimeStart,DateTimeEnd")] Session session)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SenderWalletId,SenderId,RecipientWalletId,RecipientId,CryptoId,CryptoQuantity,Message")] Transaction transaction)
         {
-            if (id != session.Id)
+            if (id != transaction.Id)
             {
                 return NotFound();
             }
@@ -104,12 +104,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(session);
+                    _context.Update(transaction);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SessionExists(session.Id))
+                    if (!TransactionExists(transaction.Id))
                     {
                         return NotFound();
                     }
@@ -120,49 +120,49 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(session);
+            return View(transaction);
         }
 
-        // GET: Sessions/Delete/5
+        // GET: Transactions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Session == null)
+            if (id == null || _context.Transaction == null)
             {
                 return NotFound();
             }
 
-            var session = await _context.Session
+            var transaction = await _context.Transaction
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (session == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(transaction);
         }
 
-        // POST: Sessions/Delete/5
+        // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Session == null)
+            if (_context.Transaction == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Session'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Transaction'  is null.");
             }
-            var session = await _context.Session.FindAsync(id);
-            if (session != null)
+            var transaction = await _context.Transaction.FindAsync(id);
+            if (transaction != null)
             {
-                _context.Session.Remove(session);
+                _context.Transaction.Remove(transaction);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SessionExists(int id)
+        private bool TransactionExists(int id)
         {
-          return _context.Session.Any(e => e.Id == id);
+          return _context.Transaction.Any(e => e.Id == id);
         }
     }
 }

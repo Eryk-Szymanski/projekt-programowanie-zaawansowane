@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>SE</h4>
+<h4>Wallet</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,29 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Weight" class="control-label"></label>
-                <input asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumOfSeries" class="control-label"></label>
-                <input asp-for="NumOfSeries" class="form-control" />
-                <span asp-validation-for="NumOfSeries" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumOfReps" class="control-label"></label>
-                <input asp-for="NumOfReps" class="form-control" />
-                <span asp-validation-for="NumOfReps" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExerciseId" class="control-label"></label>
-                <select asp-for="ExerciseId" class="form-control" asp-items="ViewBag.ExerciseId"></select>
-                <span asp-validation-for="ExerciseId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SessionId" class="control-label"></label>
-                <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
-                <span asp-validation-for="SessionId" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

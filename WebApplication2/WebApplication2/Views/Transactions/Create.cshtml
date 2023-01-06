@@ -1,4 +1,4 @@
-﻿@model WebApplication2.Models.Session
+﻿@model WebApplication2.Models.Transaction
 
 @{
     ViewData["Title"] = "Create";
@@ -6,21 +6,41 @@
 
 <h1>Create</h1>
 
-<h4>Session</h4>
+<h4>Transaction</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DateTimeStart" class="control-label"></label>
-                <input asp-for="DateTimeStart" class="form-control" />
-                <span asp-validation-for="DateTimeStart" class="text-danger"></span>
+                <label asp-for="SenderWalletId" class="control-label"></label>
+                <input asp-for="SenderWalletId" class="form-control" />
+                <span asp-validation-for="SenderWalletId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateTimeEnd" class="control-label"></label>
-                <input asp-for="DateTimeEnd" class="form-control" />
-                <span asp-validation-for="DateTimeEnd" class="text-danger"></span>
+                <label asp-for="RecipientWalletId" class="control-label"></label>
+                <input asp-for="RecipientWalletId" class="form-control" />
+                <span asp-validation-for="RecipientWalletId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecipientId" class="control-label"></label>
+                <input asp-for="RecipientId" class="form-control" />
+                <span asp-validation-for="RecipientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CryptoId" class="control-label"></label>
+                <input asp-for="CryptoId" class="form-control" />
+                <span asp-validation-for="CryptoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CryptoQuantity" class="control-label"></label>
+                <input asp-for="CryptoQuantity" class="form-control" />
+                <span asp-validation-for="CryptoQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Message" class="control-label"></label>
+                <input asp-for="Message" class="form-control" />
+                <span asp-validation-for="Message" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
