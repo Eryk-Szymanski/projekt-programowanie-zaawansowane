@@ -16,11 +16,13 @@ namespace WebApplication2.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public CryptosController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CryptosController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
+            hostingEnvironment = environment;
         }
 
         // GET: Cryptos
@@ -51,7 +53,7 @@ namespace WebApplication2.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            return View();
+            return View(new Crypto());
         }
 
         // POST: Cryptos/Create
@@ -62,6 +64,24 @@ namespace WebApplication2.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Value")] Crypto crypto)
         {
+            var img = crypto.Image;
+            var fileName = Path.GetFileName(crypto.Image.FileName);
+            var contentType = crypto.Image.ContentType;
+
+            Console.WriteLine("jo");
+
+            if (crypto.Image != null)
+            {
+                var uniqueFileName = GetUniqueFileName(crypto.Image.FileName);
+                var uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                var filePath = Path.Combine(uploads, uniqueFileName);
+                var newFile = new FileStream(filePath, FileMode.Create);
+                crypto.Image.CopyTo(newFile);
+                newFile.Close();
+
+                crypto.ImageName = uniqueFileName; 
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(crypto);
@@ -69,6 +89,15 @@ namespace WebApplication2.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(crypto);
+        }
+
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                      + "_"
+                      + Guid.NewGuid().ToString().Substring(0, 4)
+                      + Path.GetExtension(fileName);
         }
 
         // GET: Cryptos/Edit/5
