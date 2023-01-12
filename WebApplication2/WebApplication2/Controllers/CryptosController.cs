@@ -102,6 +102,74 @@ namespace WebApplication2.Controllers
                       + Path.GetExtension(fileName);
         }
 
+        // GET: Cryptos/Buy/5
+        [Authorize]
+        public async Task<IActionResult> Buy(int? id)
+        {
+            if (id == null || _context.Crypto == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = await _context.Crypto.FindAsync(id);
+            var wallets = _context.Wallet.Where(w => w.UserId == _userManager.GetUserId(User));
+            ViewData["WalletId"] = new SelectList(wallets, "Id", "Name");
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            return View(crypto);
+        }
+
+        // POST: Cryptos/Buy/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Buy(int id, float quantity, int walletId)
+        {
+            Crypto crypto = _context.Crypto.SingleOrDefault(c => c.Id == id);
+            if (id != crypto.Id)
+            {
+                return NotFound();
+            }
+            Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
+            wallet.CashBalance -= quantity * crypto.Value;
+            if(wallet.Cryptos == null)
+            {
+                wallet.Cryptos = new List<StoredCrypto>();
+            }
+            wallet.Cryptos.Add(new StoredCrypto(id, quantity));
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(wallet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!WalletExists(wallet.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(crypto);
+        }
+
+        private bool WalletExists(int id)
+        {
+            return _context.Wallet.Any(e => e.Id == id);
+        }
+
         // GET: Cryptos/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)

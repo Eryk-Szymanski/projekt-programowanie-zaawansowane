@@ -27,8 +27,23 @@ namespace WebApplication2.Controllers
         // GET: Wallets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Wallet.Where(s => s.UserId == _userManager.GetUserId(User));
-            return View(await applicationDbContext.ToListAsync());
+            var wallets = _context.Wallet.Where(s => s.UserId == _userManager.GetUserId(User));
+            Dictionary<string, float> walletValues = new Dictionary<string, float>();
+            foreach(var wallet in wallets)
+            {
+                float walletValue = 0;
+                if (wallet.Cryptos != null)
+                {
+                    foreach (var crypto in wallet.Cryptos)
+                    {
+                        float cryptoValue = crypto.Quantity * _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Value).Single();
+                        walletValue += cryptoValue;
+                    }
+                }
+                walletValues[(wallet.Id).ToString()] = walletValue;
+            }
+            ViewData["WalletValues"] = walletValues;
+            return View(await wallets.ToListAsync());
         }
 
         // GET: Wallets/Details/5
@@ -59,13 +74,67 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Wallet wallet)
+        public async Task<IActionResult> Create([Bind("Id,Name,CashBalance")] Wallet wallet)
         {
             wallet.UserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 _context.Add(wallet);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(wallet);
+        }
+
+        // GET: Wallets/AddCashBalance/5
+        public async Task<IActionResult> AddCashBalance(int? id)
+        {
+            if (id == null || _context.Wallet == null)
+            {
+                return NotFound();
+            }
+
+            var wallet = await _context.Wallet.FindAsync(id);
+            if (wallet == null)
+            {
+                return NotFound();
+            }
+            return View(wallet);
+        }
+
+        // POST: Wallets/AddCashBalance/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCashBalance(int id, float cashBalance)
+        {
+            Wallet wallet = _context.Wallet.Where(w => w.Id == id).Single();
+            if (id != wallet.Id)
+            {
+                return NotFound();
+            }
+
+            wallet.CashBalance += cashBalance;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(wallet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!WalletExists(wallet.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(wallet);
@@ -79,12 +148,12 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var sE = await _context.Wallet.FindAsync(id);
-            if (sE == null)
+            var wallet = await _context.Wallet.FindAsync(id);
+            if (wallet == null)
             {
                 return NotFound();
             }
-            return View(sE);
+            return View(wallet);
         }
 
         // POST: Wallets/Edit/5

@@ -1,19 +1,26 @@
 ﻿@model IEnumerable<WebApplication2.Models.Wallet>
+@{
+    var walletValues = ViewData["WalletValues"] as Dictionary<string, float>;
+}
+        
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Portfele";
 }
 
-<h1>Index</h1>
+<h1>Portfele</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CashBalance)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cryptos)
@@ -28,12 +35,16 @@
                 @item.Name
             </td>
             <td>
-                @item.Cryptos
+                @item.CashBalance zł
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @walletValues[(item.Id).ToString()] zł
+            </td>
+            <td>
+                <a asp-action="AddCashBalance" asp-route-id="@item.Id">Dodaj Saldo Gotówkowe</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj Portfel</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Detale</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
             </td>
         </tr>
 }

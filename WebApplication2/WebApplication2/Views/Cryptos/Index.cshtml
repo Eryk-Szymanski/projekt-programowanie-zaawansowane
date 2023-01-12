@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<WebApplication2.Models.Crypto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Strona Głowna";
 }
 
-<h1>Index</h1>
+<h1>Strona Główna</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
 <table class="table">
     <thead>
@@ -38,12 +38,13 @@
                 @item.Description
             </td>
             <td>
-                @item.Value
+                @item.Value zł
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Buy" asp-route-id="@item.Id">Kup</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Detale</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
             </td>
         </tr>
 }

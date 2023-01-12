@@ -9,7 +9,9 @@ namespace WebApplication2.Models
         public int Id { get; set; }
         [Display(Name = "Nazwa")]
         public string Name{ get; set; }
-        [Display(Name = "Stan Portfela")]
+        [Display(Name = "Saldo Gotówkowe")]
+        public float? CashBalance { get; set; }
+        [Display(Name = "Stan Portfela Kryptowalutowego")]
         public IList<StoredCrypto>? Cryptos { get; set; }
         [Display(Name = "Właściciel")]
         public string? UserId { get; set; }
@@ -19,6 +21,11 @@ namespace WebApplication2.Models
 
     public class StoredCrypto
     {
+        public StoredCrypto(int id, float quantity)
+        {
+            Id = id;
+            Quantity = quantity;
+        }
         public int Id { get; set; }
         public float Quantity { get; set; }
     }

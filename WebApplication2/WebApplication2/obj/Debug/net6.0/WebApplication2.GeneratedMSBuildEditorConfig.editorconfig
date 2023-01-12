@@ -19,6 +19,10 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Cryptos/Buy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvc1xCdXkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Cryptos/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -37,10 +41,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Cryptos/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvc1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Home/Privacy.cshtml]
@@ -77,6 +77,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Transactions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNhY3Rpb25zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Wallets/AddCashBalance.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV2FsbGV0c1xBZGRDYXNoQmFsYW5jZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Admin/projects/wsb-zajecia/semestr5/programowanie-zaawansowane/projekt/WebApplication2/WebApplication2/Views/Wallets/Create.cshtml]
