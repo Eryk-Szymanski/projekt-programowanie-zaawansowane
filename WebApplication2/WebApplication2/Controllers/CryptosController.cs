@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace WebApplication2.Controllers
 {
@@ -62,24 +64,24 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Value")] Crypto crypto)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Value")] Crypto crypto, IFormFile file)
         {
-            var img = crypto.Image;
-            var fileName = Path.GetFileName(crypto.Image.FileName);
-            var contentType = crypto.Image.ContentType;
-
-            Console.WriteLine("jo");
-
-            if (crypto.Image != null)
+            if (file != null)
             {
-                var uniqueFileName = GetUniqueFileName(crypto.Image.FileName);
-                var uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                var filePath = Path.Combine(uploads, uniqueFileName);
-                var newFile = new FileStream(filePath, FileMode.Create);
-                crypto.Image.CopyTo(newFile);
-                newFile.Close();
-
-                crypto.ImageName = uniqueFileName; 
+                var fileExtension = Path.GetExtension(file.FileName);
+                if (string.Equals(fileExtension, ".jpg", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".png", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".gif", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".jpeg", StringComparison.OrdinalIgnoreCase))
+                {
+                    crypto.Image = file;
+                    crypto.ImageName = file.FileName;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file.FileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
             }
 
             if (ModelState.IsValid)
@@ -123,11 +125,29 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Value")] Crypto crypto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Value")] Crypto crypto, IFormFile file)
         {
             if (id != crypto.Id)
             {
                 return NotFound();
+            }
+
+            if (file != null)
+            {
+                var fileExtension = Path.GetExtension(file.FileName);
+                if (string.Equals(fileExtension, ".jpg", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".png", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".gif", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(fileExtension, ".jpeg", StringComparison.OrdinalIgnoreCase))
+                {
+                    crypto.Image = file;
+                    crypto.ImageName = file.FileName;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file.FileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
             }
 
             if (ModelState.IsValid)

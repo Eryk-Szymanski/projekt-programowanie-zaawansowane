@@ -15,7 +15,7 @@ namespace WebApplication2.Models
         [Display(Name = "Wartość")]
         public float Value { get; set; }
         [NotMapped]
-        public IFormFile? Image { get; set; }
+        public virtual IFormFile? Image { get; set; }
         public string? ImageName { get; set; }
     }
 }

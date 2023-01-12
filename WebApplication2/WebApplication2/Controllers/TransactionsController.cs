@@ -28,7 +28,15 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Index()
         {
             var transactions = _context.Transaction.Where(s => s.SenderId == _userManager.GetUserId(User) || s.RecipientId == _userManager.GetUserId(User));
-              return View(await transactions.ToListAsync());
+            foreach(var transaction in transactions)
+            {
+                transaction.Sender = _context.Users.Where(u => u.Id == transaction.SenderId).Single();
+                transaction.SenderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
+                transaction.Recipient = _context.Users.Where(u => u.Id == transaction.RecipientId).Single();
+                transaction.RecipientWallet= _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
+                transaction.Crypto = _context.Crypto.Where(c => c.Id == transaction.CryptoId).Single();
+            }
+            return View(await transactions.ToListAsync());
         }
 
         // GET: Transaction/Details/5
@@ -60,9 +68,10 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SenderWalletId,SenderId,RecipientWalletId,RecipientId,CryptoId,CryptoQuantity,Message")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("Id,SenderWalletId,RecipientWalletId,CryptoId,CryptoQuantity,Message")] Transaction transaction)
         {
             transaction.SenderId = _userManager.GetUserId(User);
+            transaction.RecipientId = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Select(w => w.UserId).Single();
             if (ModelState.IsValid)
             {
                 _context.Add(transaction);

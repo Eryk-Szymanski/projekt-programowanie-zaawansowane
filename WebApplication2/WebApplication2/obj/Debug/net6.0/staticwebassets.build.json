@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "d2PAim8/Y63ti6mSDqddnGx9Ye4nq47EcolPAY3ppiU=",
+  "Hash": "TH75dTswXpW9oEGGQmFkUuWXNfhoNkYvSWmBxgB0qR4=",
   "Source": "WebApplication2",
   "BasePath": "_content/WebApplication2",
   "Mode": "Default",
@@ -2089,6 +2089,57 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\uploads\\Bitcoin.png",
+      "SourceId": "WebApplication2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\",
+      "BasePath": "_content/WebApplication2",
+      "RelativePath": "uploads/Bitcoin.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\Bitcoin.png"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\uploads\\bitkon.png",
+      "SourceId": "WebApplication2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\",
+      "BasePath": "_content/WebApplication2",
+      "RelativePath": "uploads/bitkon.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\bitkon.png"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\uploads\\Solana_logo.png",
+      "SourceId": "WebApplication2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\",
+      "BasePath": "_content/WebApplication2",
+      "RelativePath": "uploads/Solana_logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\Solana_logo.png"
     }
   ]
 }

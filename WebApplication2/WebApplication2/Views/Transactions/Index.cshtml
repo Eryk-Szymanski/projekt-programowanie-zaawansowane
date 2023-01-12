@@ -16,10 +16,10 @@
                 @Html.DisplayNameFor(model => model.SenderWalletId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RecipientWalletId)
+                @Html.DisplayNameFor(model => model.RecipientId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RecipientId)
+                @Html.DisplayNameFor(model => model.RecipientWalletId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CryptoId)
@@ -37,22 +37,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.SenderWalletId)
+                @item.SenderWallet.Name
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.RecipientWalletId)
+                @item.Recipient.Email
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.RecipientId)
+                @item.RecipientWallet.Name
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.CryptoId)
+                @item.Crypto.Name
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.CryptoQuantity)
+                @item.CryptoQuantity
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.Message)
+                @item.Message
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
