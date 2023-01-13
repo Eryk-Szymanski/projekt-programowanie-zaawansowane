@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using WebApplication2.Data;
 using WebApplication2.Models;
 
@@ -60,7 +61,35 @@ namespace WebApplication2.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
+            string userId = _userManager.GetUserId(User);
+            List<Wallet> userWallets = _context.Wallet.Where(w => w.UserId == userId).ToList();
+            Wallet dummyWallet = new Wallet();
+            dummyWallet.Name = "Wybierz porftel";
+            dummyWallet.Cryptos = null;
+            userWallets.Insert(0, dummyWallet);
+            var wallets = _context.Wallet.Where(w => w.UserId != userId);
+            if (userWallets == null || wallets == null)
+            {
+                return NotFound();
+            }
+            ViewData["UserWalletIds"] = new SelectList(userWallets, "Id", "Name");
+            ViewData["AllWallets"] = new SelectList(wallets, "Id", "Name");
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetWalletCrypto(int selectedWallet)
+        {
+            var cryptos = _context.Wallet.Where(w => w.Id == selectedWallet).Select(w => w.Cryptos).Single();
+            List<Crypto> walletCrypto = new List<Crypto>();
+            if (cryptos != null)
+            {
+                foreach (var crypto in cryptos)
+                {
+                    walletCrypto.Add(_context.Crypto.Where(c => c.Id == crypto.Id).Single());
+                }
+            }
+            return Json(walletCrypto);
         }
 
         // POST: Transactions/Create
@@ -72,6 +101,45 @@ namespace WebApplication2.Controllers
         {
             transaction.SenderId = _userManager.GetUserId(User);
             transaction.RecipientId = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Select(w => w.UserId).Single();
+            Wallet senderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
+            Wallet recipientWallet = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
+            StoredCrypto crypto = senderWallet.Cryptos.Where(c => c.Id == transaction.CryptoId).Single();
+            crypto.Quantity -= transaction.CryptoQuantity;
+            StoredCrypto crypto1 = new StoredCrypto(0, 0);
+            if (recipientWallet.Cryptos != null)
+            {
+                crypto1 = recipientWallet.Cryptos.SingleOrDefault(c => c.Id == transaction.CryptoId);
+                if (crypto1 != null)
+                {
+                    crypto1.Quantity += transaction.CryptoQuantity;
+                }
+            } else { 
+                recipientWallet.Cryptos = new List<StoredCrypto>();
+                crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
+                recipientWallet.Cryptos.Add(crypto1);
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(senderWallet);
+                    await _context.SaveChangesAsync();
+                    _context.Update(recipientWallet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TransactionExists(transaction.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(transaction);

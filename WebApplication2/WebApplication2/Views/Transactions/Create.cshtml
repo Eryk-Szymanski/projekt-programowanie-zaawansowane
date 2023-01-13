@@ -1,12 +1,12 @@
 ﻿@model WebApplication2.Models.Transaction
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nowy transfer";
 }
 
-<h1>Create</h1>
+<h1>Dodaj</h1>
 
-<h4>Transaction</h4>
+<h4>Transfer</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,22 +14,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SenderWalletId" class="control-label"></label>
-                <input asp-for="SenderWalletId" class="form-control" />
+                <select class="form-control" asp-for="SenderWalletId" id="SenderWalletId" asp-items="ViewBag.UserWalletIds"></select>
                 <span asp-validation-for="SenderWalletId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RecipientWalletId" class="control-label"></label>
-                <input asp-for="RecipientWalletId" class="form-control" />
+                <select class="form-control" asp-for="RecipientWalletId" asp-items="ViewBag.AllWallets"></select>
                 <span asp-validation-for="RecipientWalletId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CryptoId" class="control-label"></label>
-                <input asp-for="CryptoId" class="form-control" />
+                <select class="form-control" asp-for="CryptoId" id="CryptoSelect"></select>
                 <span asp-validation-for="CryptoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CryptoQuantity" class="control-label"></label>
-                <input asp-for="CryptoQuantity" class="form-control" />
+                <!--<input asp-for="CryptoQuantity" type="range" min="1" max="100" step="1" value="1" class="slider form-control" oninput="this.nextElementSibling.value = this.value">
+                <output>1</output>-->
+                <input asp-for="CryptoQuantity" type="number" class="form-control">
                 <span asp-validation-for="CryptoQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -45,9 +47,28 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $("#SenderWalletId").change(function () {
+            var selectedWallet = $(this).val();
+            var ddl = $("#CryptoSelect");
+            $.ajax({
+                url: "/Transactions/GetWalletCrypto",
+                method: "Post",
+                data: { "selectedWallet": selectedWallet },
+                success: function (result) {
+                    var s = "";
+                    for (var i = 0; i < result.length; i++) {
+                        console.log(result[i].name);
+                        s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                    }
+                    ddl.html(s);
+                }
+            });
+        });
+    </script>
 }

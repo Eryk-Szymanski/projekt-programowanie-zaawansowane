@@ -24,7 +24,7 @@ namespace WebApplication2.Models
         [Display(Name = "Kryptowaluta")]
         public int CryptoId { get; set; }
         [NotMapped]
-        public virtual Crypto Crypto { get; set; }
+        public virtual Crypto? Crypto { get; set; }
         [Display(Name = "Ilość")]
         public float CryptoQuantity { get; set; }
         [Display(Name = "Wiadomość")]
