@@ -29,8 +29,6 @@
             </div>
             <div class="form-group">
                 <label asp-for="CryptoQuantity" class="control-label"></label>
-                <!--<input asp-for="CryptoQuantity" type="range" min="1" max="100" step="1" value="1" class="slider form-control" oninput="this.nextElementSibling.value = this.value">
-                <output>1</output>-->
                 <input asp-for="CryptoQuantity" type="number" class="form-control">
                 <span asp-validation-for="CryptoQuantity" class="text-danger"></span>
             </div>
@@ -54,6 +52,9 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $("#SenderWalletId").change(function () {
+            if ($("#SenderWalletId option[value='-1']") != null) {
+                $("#SenderWalletId option[value='-1']").remove();
+            }
             var selectedWallet = $(this).val();
             var ddl = $("#CryptoSelect");
             $.ajax({

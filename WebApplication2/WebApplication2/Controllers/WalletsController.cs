@@ -55,6 +55,16 @@ namespace WebApplication2.Controllers
             }
 
             var wallet = await _context.Wallet.FirstOrDefaultAsync(m => m.Id == id);
+            Dictionary<string, float> cryptos = new Dictionary<string, float>();
+            if (wallet.Cryptos != null)
+            {
+                foreach (var crypto in wallet.Cryptos)
+                {
+                    string name = _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Name).Single();
+                    cryptos[name] = crypto.Quantity;
+                }
+            }
+            ViewData["cryptos"] = cryptos;
             if (wallet == null)
             {
                 return NotFound();

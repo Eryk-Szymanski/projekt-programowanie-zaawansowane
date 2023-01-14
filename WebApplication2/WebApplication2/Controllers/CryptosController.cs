@@ -30,6 +30,7 @@ namespace WebApplication2.Controllers
         // GET: Cryptos
         public async Task<IActionResult> Index()
         {
+            ViewData["IsAdmin"] = User.IsInRole("Admin");
               return View(await _context.Crypto.ToListAsync());
         }
 
@@ -135,34 +136,132 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
             Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
-            wallet.CashBalance -= quantity * crypto.Value;
-            if(wallet.Cryptos == null)
+            if (wallet.CashBalance >= quantity * crypto.Value)
             {
-                wallet.Cryptos = new List<StoredCrypto>();
-            }
-            wallet.Cryptos.Add(new StoredCrypto(id, quantity));
-
-            if (ModelState.IsValid)
-            {
-                try
+                wallet.CashBalance -= quantity * crypto.Value;
+                if (wallet.Cryptos == null)
                 {
-                    _context.Update(wallet);
-                    await _context.SaveChangesAsync();
+                    wallet.Cryptos = new List<StoredCrypto>();
                 }
-                catch (DbUpdateConcurrencyException)
+                wallet.Cryptos.Add(new StoredCrypto(id, quantity));
+                if (ModelState.IsValid)
                 {
-                    if (!WalletExists(wallet.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(wallet);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!WalletExists(wallet.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(crypto);
+        }
+
+        // GET: Cryptos/Sell/5
+        [Authorize]
+        public async Task<IActionResult> Sell(int? id)
+        {
+            if (id == null || _context.Crypto == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = await _context.Crypto.FindAsync(id);
+            var wallets = _context.Wallet.Where(w => w.UserId == _userManager.GetUserId(User));
+            List<Wallet> correctWallets = new List<Wallet>();
+            foreach (var wallet in wallets)
+            {
+                if (wallet.Cryptos != null)
+                {
+                    foreach (var c in wallet.Cryptos)
+                    {
+                        if (c.Id == crypto.Id)
+                        {
+                            correctWallets.Add(wallet);
+                            break;
+                        }
+                    }
+                }
+            }
+            ViewData["WalletId"] = new SelectList(correctWallets, "Id", "Name");
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            return View(crypto);
+        }
+
+        // POST: Cryptos/Sell/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Sell(int id, float quantity, int walletId)
+        {
+            Crypto crypto = _context.Crypto.SingleOrDefault(c => c.Id == id);
+            if (id != crypto.Id)
+            {
+                return NotFound();
+            }
+            Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
+            StoredCrypto walletCrypto = wallet.Cryptos.Where(c => c.Id == id).Single();
+            if (walletCrypto.Quantity >= quantity)
+            {
+                walletCrypto.Quantity -= quantity;
+                wallet.CashBalance += crypto.Value * quantity;
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(wallet);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!WalletExists(wallet.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View(crypto);
+        }
+
+        [HttpPost]
+        public IActionResult GetWallets(int selectedCrypto)
+        {
+            var wallets = _context.Wallet.Where(w => w.UserId == _userManager.GetUserId(User));
+            List<Wallet> correctWallets = new List<Wallet>();
+            foreach(var wallet in wallets)
+            {
+                foreach(var crypto in wallet.Cryptos)
+                {
+                    if(crypto.Id == selectedCrypto)
+                    {
+                        correctWallets.Add(wallet);
+                        break;
+                    }
+                }
+            }
+            return Json(correctWallets);
         }
 
         private bool WalletExists(int id)
@@ -242,6 +341,7 @@ namespace WebApplication2.Controllers
         }
 
         // GET: Cryptos/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Crypto == null)
@@ -262,6 +362,7 @@ namespace WebApplication2.Controllers
         // POST: Cryptos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Crypto == null)

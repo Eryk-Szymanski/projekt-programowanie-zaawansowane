@@ -37,6 +37,7 @@ namespace WebApplication2.Controllers
                 transaction.RecipientWallet= _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
                 transaction.Crypto = _context.Crypto.Where(c => c.Id == transaction.CryptoId).Single();
             }
+            ViewData["IsAdmin"] = User.IsInRole("Admin");
             return View(await transactions.ToListAsync());
         }
 
@@ -64,6 +65,7 @@ namespace WebApplication2.Controllers
             string userId = _userManager.GetUserId(User);
             List<Wallet> userWallets = _context.Wallet.Where(w => w.UserId == userId).ToList();
             Wallet dummyWallet = new Wallet();
+            dummyWallet.Id = -1;
             dummyWallet.Name = "Wybierz porftel";
             dummyWallet.Cryptos = null;
             userWallets.Insert(0, dummyWallet);
@@ -104,47 +106,52 @@ namespace WebApplication2.Controllers
             Wallet senderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
             Wallet recipientWallet = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
             StoredCrypto crypto = senderWallet.Cryptos.Where(c => c.Id == transaction.CryptoId).Single();
-            crypto.Quantity -= transaction.CryptoQuantity;
-            StoredCrypto crypto1 = new StoredCrypto(0, 0);
-            if (recipientWallet.Cryptos != null)
+            if(crypto.Quantity >= transaction.CryptoQuantity)
             {
-                crypto1 = recipientWallet.Cryptos.SingleOrDefault(c => c.Id == transaction.CryptoId);
-                if (crypto1 != null)
+                crypto.Quantity -= transaction.CryptoQuantity;
+                StoredCrypto crypto1 = new StoredCrypto(0, 0);
+                if (recipientWallet.Cryptos != null)
                 {
-                    crypto1.Quantity += transaction.CryptoQuantity;
-                }
-            } else { 
-                recipientWallet.Cryptos = new List<StoredCrypto>();
-                crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
-                recipientWallet.Cryptos.Add(crypto1);
-            }
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(senderWallet);
-                    await _context.SaveChangesAsync();
-                    _context.Update(recipientWallet);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TransactionExists(transaction.Id))
+                    crypto1 = recipientWallet.Cryptos.SingleOrDefault(c => c.Id == transaction.CryptoId);
+                    if (crypto1 != null)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        crypto1.Quantity += transaction.CryptoQuantity;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            if (ModelState.IsValid)
-            {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    recipientWallet.Cryptos = new List<StoredCrypto>();
+                    crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
+                    recipientWallet.Cryptos.Add(crypto1);
+                }
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(senderWallet);
+                        await _context.SaveChangesAsync();
+                        _context.Update(recipientWallet);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!TransactionExists(transaction.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(transaction);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(transaction);
         }
@@ -201,6 +208,7 @@ namespace WebApplication2.Controllers
         }
 
         // GET: Transactions/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Transaction == null)
