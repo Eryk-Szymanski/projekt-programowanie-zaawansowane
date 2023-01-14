@@ -142,8 +142,22 @@ namespace WebApplication2.Controllers
                 if (wallet.Cryptos == null)
                 {
                     wallet.Cryptos = new List<StoredCrypto>();
+                } else
+                {
+                    bool cryptoInWallet = false;
+                    foreach (var walletCrypto in wallet.Cryptos)
+                    {
+                        if(walletCrypto.Id == id)
+                        {
+                            cryptoInWallet = true;
+                            walletCrypto.Quantity += quantity;
+                        }
+                    }
+                    if(!cryptoInWallet)
+                    {
+                        wallet.Cryptos.Add(new StoredCrypto(id, quantity));
+                    }
                 }
-                wallet.Cryptos.Add(new StoredCrypto(id, quantity));
                 if (ModelState.IsValid)
                 {
                     try
@@ -210,16 +224,28 @@ namespace WebApplication2.Controllers
         [Authorize]
         public async Task<IActionResult> Sell(int id, float quantity, int walletId)
         {
-            Crypto crypto = _context.Crypto.SingleOrDefault(c => c.Id == id);
+            Crypto crypto = _context.Crypto.Where(c => c.Id == id).Single();
             if (id != crypto.Id)
             {
                 return NotFound();
             }
-            Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
-            StoredCrypto walletCrypto = wallet.Cryptos.Where(c => c.Id == id).Single();
+            Wallet wallet = _context.Wallet.Where(w => w.Id == walletId).Single();
+            StoredCrypto walletCrypto = null;
+            foreach(var c in wallet.Cryptos)
+            {
+                if(c.Id == crypto.Id)
+                {
+                    walletCrypto = c;
+                    break;
+                }
+            }
             if (walletCrypto.Quantity >= quantity)
             {
                 walletCrypto.Quantity -= quantity;
+                if(walletCrypto.Quantity == 0)
+                {
+                    wallet.Cryptos.Remove(walletCrypto);
+                }
                 wallet.CashBalance += crypto.Value * quantity;
                 if (ModelState.IsValid)
                 {
