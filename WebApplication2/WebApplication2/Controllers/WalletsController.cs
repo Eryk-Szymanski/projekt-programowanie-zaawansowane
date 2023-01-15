@@ -86,12 +86,15 @@ namespace WebApplication2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CashBalance")] Wallet wallet)
         {
-            wallet.UserId = _userManager.GetUserId(User);
-            if (ModelState.IsValid)
+            if (wallet.CashBalance > 0)
             {
-                _context.Add(wallet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                wallet.UserId = _userManager.GetUserId(User);
+                if (ModelState.IsValid)
+                {
+                    _context.Add(wallet);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(wallet);
         }
@@ -125,27 +128,31 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            wallet.CashBalance += cashBalance;
-
-            if (ModelState.IsValid)
+            if (cashBalance > 0)
             {
-                try
+
+                wallet.CashBalance += cashBalance;
+
+                if (ModelState.IsValid)
                 {
-                    _context.Update(wallet);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WalletExists(wallet.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(wallet);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!WalletExists(wallet.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(wallet);
         }

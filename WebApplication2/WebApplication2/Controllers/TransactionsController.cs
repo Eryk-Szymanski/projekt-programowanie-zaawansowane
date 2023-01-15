@@ -101,56 +101,54 @@ namespace WebApplication2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SenderWalletId,RecipientWalletId,CryptoId,CryptoQuantity,Message")] Transaction transaction)
         {
-            transaction.SenderId = _userManager.GetUserId(User);
-            transaction.RecipientId = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Select(w => w.UserId).Single();
-            Wallet senderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
-            Wallet recipientWallet = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
-            StoredCrypto crypto = senderWallet.Cryptos.Where(c => c.Id == transaction.CryptoId).Single();
-            if(crypto.Quantity >= transaction.CryptoQuantity)
-            {
-                crypto.Quantity -= transaction.CryptoQuantity;
-                StoredCrypto crypto1 = new StoredCrypto(0, 0);
-                if (recipientWallet.Cryptos != null)
+            if (transaction.CryptoQuantity > 0) { 
+                transaction.SenderId = _userManager.GetUserId(User);
+                transaction.RecipientId = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Select(w => w.UserId).Single();
+                Wallet senderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
+                Wallet recipientWallet = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
+                StoredCrypto crypto = senderWallet.Cryptos.Where(c => c.Id == transaction.CryptoId).Single();
+                if (crypto.Quantity >= transaction.CryptoQuantity)
                 {
-                    crypto1 = recipientWallet.Cryptos.SingleOrDefault(c => c.Id == transaction.CryptoId);
-                    if (crypto1 != null)
+                    crypto.Quantity -= transaction.CryptoQuantity;
+                    StoredCrypto crypto1 = new StoredCrypto(0, 0);
+                    if (recipientWallet.Cryptos != null)
                     {
-                        crypto1.Quantity += transaction.CryptoQuantity;
-                    }
-                }
-                else
-                {
-                    recipientWallet.Cryptos = new List<StoredCrypto>();
-                    crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
-                    recipientWallet.Cryptos.Add(crypto1);
-                }
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(senderWallet);
-                        await _context.SaveChangesAsync();
-                        _context.Update(recipientWallet);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!TransactionExists(transaction.Id))
+                        crypto1 = recipientWallet.Cryptos.SingleOrDefault(c => c.Id == transaction.CryptoId);
+                        if (crypto1 != null)
                         {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
+                            crypto1.Quantity += transaction.CryptoQuantity;
                         }
                     }
-                    return RedirectToAction(nameof(Index));
-                }
-                if (ModelState.IsValid)
-                {
-                    _context.Add(transaction);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        recipientWallet.Cryptos = new List<StoredCrypto>();
+                        crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
+                        recipientWallet.Cryptos.Add(crypto1);
+                    }
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            _context.Update(senderWallet);
+                            await _context.SaveChangesAsync();
+                            _context.Update(recipientWallet);
+                            await _context.SaveChangesAsync();
+                            _context.Add(transaction);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!TransactionExists(transaction.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                    }
                 }
             }
             return View(transaction);

@@ -84,12 +84,14 @@ namespace WebApplication2.Controllers
                     }
                 }
             }
-
-            if (ModelState.IsValid)
+            if (crypto.Value > 0)
             {
-                _context.Add(crypto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(crypto);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(crypto);
         }
@@ -131,52 +133,56 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Buy(int id, float quantity, int walletId)
         {
             Crypto crypto = _context.Crypto.SingleOrDefault(c => c.Id == id);
-            if (id != crypto.Id)
+            if (quantity > 0 && walletId != null)
             {
-                return NotFound();
-            }
-            Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
-            if (wallet.CashBalance >= quantity * crypto.Value)
-            {
-                wallet.CashBalance -= quantity * crypto.Value;
-                if (wallet.Cryptos == null)
+                if (id != crypto.Id)
                 {
-                    wallet.Cryptos = new List<StoredCrypto>();
-                } else
-                {
-                    bool cryptoInWallet = false;
-                    foreach (var walletCrypto in wallet.Cryptos)
-                    {
-                        if(walletCrypto.Id == id)
-                        {
-                            cryptoInWallet = true;
-                            walletCrypto.Quantity += quantity;
-                        }
-                    }
-                    if(!cryptoInWallet)
-                    {
-                        wallet.Cryptos.Add(new StoredCrypto(id, quantity));
-                    }
+                    return NotFound();
                 }
-                if (ModelState.IsValid)
+                Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
+                if (wallet.CashBalance >= quantity * crypto.Value)
                 {
-                    try
+                    wallet.CashBalance -= quantity * crypto.Value;
+                    if (wallet.Cryptos == null)
                     {
-                        _context.Update(wallet);
-                        await _context.SaveChangesAsync();
+                        wallet.Cryptos = new List<StoredCrypto>();
                     }
-                    catch (DbUpdateConcurrencyException)
+                    else
                     {
-                        if (!WalletExists(wallet.Id))
+                        bool cryptoInWallet = false;
+                        foreach (var walletCrypto in wallet.Cryptos)
                         {
-                            return NotFound();
+                            if (walletCrypto.Id == id)
+                            {
+                                cryptoInWallet = true;
+                                walletCrypto.Quantity += quantity;
+                            }
                         }
-                        else
+                        if (!cryptoInWallet)
                         {
-                            throw;
+                            wallet.Cryptos.Add(new StoredCrypto(id, quantity));
                         }
                     }
-                    return RedirectToAction(nameof(Index));
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            _context.Update(wallet);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!WalletExists(wallet.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
             }
             return View(crypto);
@@ -225,47 +231,50 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Sell(int id, float quantity, int walletId)
         {
             Crypto crypto = _context.Crypto.Where(c => c.Id == id).Single();
-            if (id != crypto.Id)
+            if (quantity > 0)
             {
-                return NotFound();
-            }
-            Wallet wallet = _context.Wallet.Where(w => w.Id == walletId).Single();
-            StoredCrypto walletCrypto = null;
-            foreach(var c in wallet.Cryptos)
-            {
-                if(c.Id == crypto.Id)
+                if (id != crypto.Id)
                 {
-                    walletCrypto = c;
-                    break;
+                    return NotFound();
                 }
-            }
-            if (walletCrypto.Quantity >= quantity)
-            {
-                walletCrypto.Quantity -= quantity;
-                if(walletCrypto.Quantity == 0)
+                Wallet wallet = _context.Wallet.Where(w => w.Id == walletId).Single();
+                StoredCrypto walletCrypto = null;
+                foreach (var c in wallet.Cryptos)
                 {
-                    wallet.Cryptos.Remove(walletCrypto);
+                    if (c.Id == crypto.Id)
+                    {
+                        walletCrypto = c;
+                        break;
+                    }
                 }
-                wallet.CashBalance += crypto.Value * quantity;
-                if (ModelState.IsValid)
+                if (walletCrypto.Quantity >= quantity)
                 {
-                    try
+                    walletCrypto.Quantity -= quantity;
+                    if (walletCrypto.Quantity == 0)
                     {
-                        _context.Update(wallet);
-                        await _context.SaveChangesAsync();
+                        wallet.Cryptos.Remove(walletCrypto);
                     }
-                    catch (DbUpdateConcurrencyException)
+                    wallet.CashBalance += crypto.Value * quantity;
+                    if (ModelState.IsValid)
                     {
-                        if (!WalletExists(wallet.Id))
+                        try
                         {
-                            return NotFound();
+                            _context.Update(wallet);
+                            await _context.SaveChangesAsync();
                         }
-                        else
+                        catch (DbUpdateConcurrencyException)
                         {
-                            throw;
+                            if (!WalletExists(wallet.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
                         }
+                        return RedirectToAction(nameof(Index));
                     }
-                    return RedirectToAction(nameof(Index));
                 }
             }
             return View(crypto);
@@ -343,25 +352,28 @@ namespace WebApplication2.Controllers
                 }
             }
 
-            if (ModelState.IsValid)
+            if (crypto.Value > 0)
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(crypto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CryptoExists(crypto.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(crypto);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!CryptoExists(crypto.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(crypto);
         }
