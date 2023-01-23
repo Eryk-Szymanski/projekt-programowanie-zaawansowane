@@ -13,20 +13,38 @@
         <dt class="col-sm-2 text-warning">
             @Html.DisplayNameFor(model => model.SenderWalletId)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RecipientWalletId)
+        <dd class="col-sm-10 text-warning">
+            @Model.SenderWallet.Name
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-warning">
             @Html.DisplayNameFor(model => model.RecipientId)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CryptoId)
+        <dd class="col-sm-10 text-warning">
+            @Model.Recipient.Email
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayFor(model => model.CryptoQuantity)
+        <dt class="col-sm-2 text-warning">
+            @Html.DisplayNameFor(model => model.RecipientWalletId)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Message)
+        <dd class="col-sm-10 text-warning">
+            @Model.RecipientWallet.Name
+        </dd>
+        <dt class="col-sm-2 text-warning">
+            @Html.DisplayNameFor(model => model.CryptoId)
+        </dt>
+        <dd class="col-sm-10 text-warning">
+            @Model.Crypto.Name
+        </dd>
+        <dt class="col-sm-2 text-warning">
+            @Html.DisplayNameFor(model => model.CryptoQuantity)
+        </dt>
+        <dd class="col-sm-10 text-warning">
+            @Model.CryptoQuantity
+        </dd>
+        <dt class="col-sm-2 text-warning">
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+        <dd class="col-sm-10 text-warning">
+            @Model.Message
         </dd>
     </dl>
 </div>

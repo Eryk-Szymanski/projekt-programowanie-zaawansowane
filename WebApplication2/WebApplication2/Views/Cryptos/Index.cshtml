@@ -4,7 +4,7 @@
     ViewData["Title"] = "Strona Głowna";
 }
 
-<h1 class="text-warning p-1">Strona Główna</h1>
+<h1 class="text-warning">Strona Główna</h1>
 
 <p>
     @{
@@ -18,15 +18,15 @@
         <tr>
             <th></th>
             <th>
-                <h3>@Html.DisplayNameFor(model => model.Name)</h3>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th class="col-md-3">
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                <h3>@Html.DisplayNameFor(model => model.Description)</h3>
+                @Html.DisplayNameFor(model => model.Value)
             </th>
-            <th>
-                <h3>@Html.DisplayNameFor(model => model.Value)</h3>
-            </th>
-            <th> <h3>Wybierz działanie</h3></th>
+            <th>Wybierz działanie</th>
         </tr>
     </thead>
     <tbody class="text-warning">
@@ -36,13 +36,13 @@
                 <img src="~/uploads/@item.ImageName" class="img" alt="Image" style="height:25px;"/>
             </td>
             <td>
-                    <h5>@item.Name</h5>
+                    @item.Name
             </td>
             <td>
-                    <h5>@item.Description</h5>
+                    <textarea disabled class="form-control text-warning" style="resize:none;background:none;">@item.Description</textarea>
             </td>
             <td>
-                    <h5> @item.Value zł</h5>
+                    @item.Value zł
             </td>
             <td>
                     <a class="text-warning btn btn-sm border border-warning mx-3" asp-action="Buy" asp-route-id="@item.Id">Kup</a>

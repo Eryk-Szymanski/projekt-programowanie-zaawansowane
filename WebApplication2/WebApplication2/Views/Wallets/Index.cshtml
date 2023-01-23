@@ -17,13 +17,13 @@
     <thead>
         <tr>
             <th>
-                <h3>@Html.DisplayNameFor(model => model.Name)</h3>
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                <h3>@Html.DisplayNameFor(model => model.CashBalance)</h3>
+                @Html.DisplayNameFor(model => model.CashBalance)
             </th>
             <th>
-                <h3>@Html.DisplayNameFor(model => model.Cryptos)</h3>
+                @Html.DisplayNameFor(model => model.Cryptos)
             </th>
             <th></th>
         </tr>
@@ -32,13 +32,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    <h5>@item.Name</h5>
+                    @item.Name
             </td>
             <td>
-                    <h5>@item.CashBalance zł</h5>
+                    @item.CashBalance zł
             </td>
             <td>
-                    <h5>@walletValues[(item.Id).ToString()] zł</h5>
+                    @walletValues[(item.Id).ToString()] zł
             </td>
                 <td>
                     <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="AddCashBalance" asp-route-id="@item.Id">Dodaj Saldo Gotówkowe</a>

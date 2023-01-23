@@ -51,6 +51,11 @@ namespace WebApplication2.Controllers
 
             var transaction = await _context.Transaction
                 .FirstOrDefaultAsync(m => m.Id == id);
+            transaction.Sender = _context.Users.Where(u => u.Id == transaction.SenderId).Single();
+            transaction.SenderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
+            transaction.Recipient = _context.Users.Where(u => u.Id == transaction.RecipientId).Single();
+            transaction.RecipientWallet = _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
+            transaction.Crypto = _context.Crypto.Where(c => c.Id == transaction.CryptoId).Single();
             if (transaction == null)
             {
                 return NotFound();
