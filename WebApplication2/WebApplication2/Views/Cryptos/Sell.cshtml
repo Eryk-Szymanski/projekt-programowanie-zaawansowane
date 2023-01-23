@@ -4,47 +4,47 @@
     ViewData["Title"] = "Sprzedaj";
 }
 
-<h1>Sprzedaj</h1>
+<h1 class ="text-warning p-1">Sprzedaj</h1>
 
-<h4>@Model.Name</h4>
+<h2 class="text-warning p-2">@Model.Name</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <form asp-action="Sell">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label class="control-label">Ilość</label>
-                <input type="number" name="quantity" class="form-control" id="QuantityInput" />
+            <div class="form-group text-warning">
+                <label class="control-label "><h3>Ilość</h3></label>
+                <input type="number" name="quantity" class="form-control bg-dark text-warning" id="QuantityInput" />
                 <span class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Wartość</label>
+            </div> <br>
+            <div class="form-group text-warning">
+                <label class="control-label"><h3>Wartość</h3></label>
                 <table>
-                    <tr>
-                        <td><div id="cryptoValue">@Model.Value</div></td>
-                        <td><div>zł</div></td>
+                    <tr class="text-warning border border-warning">
+                        <td><h3 id="cryptoValue">@Model.Value</h3></td>
+                        <td><div><h4>ZŁ</h4></div></td>
                     </tr>
                 </table>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Całkowia wartość</label>
+            </div><br>
+            <div class="form-group text-warning">
+                <label class="control-label"><h3>Całkowia wartość</h3></label>
                 <div id="totalValue"></div>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Wybierz Portfel</label>
-                <select class="form-control" name="walletId" asp-items="ViewBag.WalletId"></select>
+            </div><br>
+            <div class="form-group text-warning">
+                <label class="control-label"><h3>Wybierz Portfel</h3></label>
+                <select class="form-control bg-dark text-warning" name="walletId" asp-items="ViewBag.WalletId"></select>
                 <span class="text-danger"></span>
-            </div>
+            </div><br>
             <div class="form-group">
-                <input type="submit" value="Sprzedaj" class="btn btn-primary" />
+                <input type="submit" value="Sprzedaj" class="btn btn-outline-warning btn-lg" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Powrót</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót</h6></a>
 </div>
 
 @section Scripts {

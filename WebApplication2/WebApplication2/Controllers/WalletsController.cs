@@ -187,9 +187,11 @@ namespace WebApplication2.Controllers
 
             if (ModelState.IsValid)
             {
+                var walletDB = await _context.Wallet.FindAsync(id);
+                walletDB.Name = wallet.Name;
                 try
                 {
-                    _context.Update(wallet);
+                    _context.Update(walletDB);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

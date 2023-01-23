@@ -4,48 +4,48 @@
     ViewData["Title"] = "Nowy transfer";
 }
 
-<h1>Dodaj</h1>
+<h1 class="text-warning p-1">Dodaj</h1>
 
-<h4>Transfer</h4>
+<h2 class="text-warning p-2">Transfer</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning bg-warning p-3  bg-opacity-10 rounded border border-warning">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SenderWalletId" class="control-label"></label>
-                <select class="form-control" asp-for="SenderWalletId" id="SenderWalletId" asp-items="ViewBag.UserWalletIds"></select>
+                <label asp-for="SenderWalletId" class="control-label"><h4>Portfel Nadawcy</h4></label>
+                <select class="form-control bg-dark text-warning" asp-for="SenderWalletId" id="SenderWalletId" asp-items="ViewBag.UserWalletIds"></select>
                 <span asp-validation-for="SenderWalletId" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="RecipientWalletId" class="control-label"></label>
-                <select class="form-control" asp-for="RecipientWalletId" asp-items="ViewBag.AllWallets"></select>
+                <label asp-for="RecipientWalletId" class="control-label"><h4>Portfel Odbiorcy</h4></label>
+                <select class="form-control bg-dark text-warning" asp-for="RecipientWalletId" asp-items="ViewBag.AllWallets"></select>
                 <span asp-validation-for="RecipientWalletId" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="CryptoId" class="control-label"></label>
-                <select class="form-control" asp-for="CryptoId" id="CryptoSelect"></select>
+                <label asp-for="CryptoId" class="control-label"><h>Kryptowaluta</h></label>
+                <select class="form-control bg-dark text-warning" asp-for="CryptoId" id="CryptoSelect"></select>
                 <span asp-validation-for="CryptoId" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="CryptoQuantity" class="control-label"></label>
-                <input asp-for="CryptoQuantity" type="number" class="form-control">
+                <label asp-for="CryptoQuantity" class="control-label"><h4>Ilość</h4></label>
+                <input asp-for="CryptoQuantity" type="number" class="form-control bg-dark text-warning">
                 <span asp-validation-for="CryptoQuantity" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
+                <label asp-for="Message" class="control-label"><h4>Wiadomość</h4></label>
+                <input asp-for="Message" class="form-control bg-dark text-warning" />
+                <span asp-validation-for="Message" class="text-danger "></span>
+            </div> <br>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz" class="btn btn-outline-warning btn-lg" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Powrót</a>
+    <a class="text-warning" asp-action="Index">Powrót</a>
 </div>
 
 @section Scripts {

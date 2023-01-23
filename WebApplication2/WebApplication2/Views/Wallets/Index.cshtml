@@ -8,22 +8,22 @@
     ViewData["Title"] = "Portfele";
 }
 
-<h1>Portfele</h1>
+<h1 class ="text-warning">Portfele</h1>
 
 <p>
-    <a asp-action="Create">Dodaj</a>
+    <a class="text-warning" asp-action="Create"><h2 class="p-3">Dodaj</h2></a>
 </p>
-<table class="table">
+<table class="text-warning table table-dark table-bordered border-warning">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <h3>@Html.DisplayNameFor(model => model.Name)</h3>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CashBalance)
+                <h3>@Html.DisplayNameFor(model => model.CashBalance)</h3>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cryptos)
+                <h3>@Html.DisplayNameFor(model => model.Cryptos)</h3>
             </th>
             <th></th>
         </tr>
@@ -32,20 +32,20 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @item.Name
+                    <h5>@item.Name</h5>
             </td>
             <td>
-                @item.CashBalance zł
+                    <h5>@item.CashBalance zł</h5>
             </td>
             <td>
-                @walletValues[(item.Id).ToString()] zł
+                    <h5>@walletValues[(item.Id).ToString()] zł</h5>
             </td>
-            <td>
-                <a asp-action="AddCashBalance" asp-route-id="@item.Id">Dodaj Saldo Gotówkowe</a>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj Portfel</a>
-                <a asp-action="Details" asp-route-id="@item.Id">Detale</a>
-                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
-            </td>
+                <td>
+                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="AddCashBalance" asp-route-id="@item.Id">Dodaj Saldo Gotówkowe</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="Edit" asp-route-id="@item.Id">Edytuj Portfel</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="Details" asp-route-id="@item.Id">Detale</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+            
         </tr>
 }
     </tbody>

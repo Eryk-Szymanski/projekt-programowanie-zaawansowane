@@ -4,29 +4,29 @@
     ViewData["Title"] = "Dodaj Saldo Gotówkowe";
 }
 
-<h1>Dodaj Saldo Gotówkowe</h1>
+<h1 class ="text-warning p-1">Dodaj Saldo Gotówkowe</h1>
 
-<h4>Portfel</h4>
+<h2 class="text-warning p-2">Portfele</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <form asp-action="AddCashBalance">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger">></div> 
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="CashBalance" class="control-label"></label>
-                <input asp-for="CashBalance" type="number" name="cashBalance" class="form-control" />
+                <label asp-for="CashBalance" class="control-label"><h3>Saldo Gotówkowe</h3</label> 
+                <input asp-for="CashBalance" type="number" name="cashBalance" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="CashBalance" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <input type="submit" value="Dodaj" class="btn btn-primary" />
-            </div>
+                <input type="submit" value="Dodaj" class="btn btn-outline-warning btn-lg" />
+            </div> <br>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Powrót</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót</h6></a>
 </div>
 
 @section Scripts {

@@ -4,55 +4,55 @@
     ViewData["Title"] = "Strona Głowna";
 }
 
-<h1>Strona Główna</h1>
+<h1 class="text-warning p-1">Strona Główna</h1>
 
 <p>
     @{
         if((bool)ViewData["IsAdmin"]) {
-            <a asp-action="Create">Dodaj</a>
+            <a class="text-warning" asp-action="Create"><h2 class="p-3">Dodaj</h2></a>
         }
     }
 </p>
-<table class="table">
-    <thead>
+<table class="text-warning table table-dark table-bordered border-warning">
+    <thead >
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <h3>@Html.DisplayNameFor(model => model.Name)</h3>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                <h3>@Html.DisplayNameFor(model => model.Description)</h3>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Value)
+                <h3>@Html.DisplayNameFor(model => model.Value)</h3>
             </th>
-            <th></th>
+            <th> <h3>Wybierz działanie</h3></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="text-warning">
 @foreach (var item in Model) {
         <tr>
             <td>
                 <img src="~/uploads/@item.ImageName" class="img" alt="Image" style="height:25px;"/>
             </td>
             <td>
-                @item.Name
+                    <h5>@item.Name</h5>
             </td>
             <td>
-                @item.Description
+                    <h5>@item.Description</h5>
             </td>
             <td>
-                @item.Value zł
+                    <h5> @item.Value zł</h5>
             </td>
             <td>
-                <a asp-action="Buy" asp-route-id="@item.Id">Kup</a>
-                <a asp-action="Sell" asp-route-id="@item.Id">Sprzedaj</a>
-                <a asp-action="Details" asp-route-id="@item.Id">Detale</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-3" asp-action="Buy" asp-route-id="@item.Id">Kup</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-3" asp-action="Sell" asp-route-id="@item.Id">Sprzedaj</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-3" asp-action="Details" asp-route-id="@item.Id">Detale</a>
                     @{
                         if ((bool)ViewData["IsAdmin"])
                         {
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                            <a class="text-warning btn btn-sm border border-warning mx-3 " asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                            <a class="text-warning btn btn-sm border border-warning mx-3 " asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
                         }
                     }
             </td>

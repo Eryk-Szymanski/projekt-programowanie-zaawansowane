@@ -4,33 +4,35 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="text-warning p-1">Dodaj</h1>
 
-<h4>Wallet</h4>
+<h2 class="text-warning p-3">Portfel</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label"><h3>Nazwa</h3></label>
+                <input asp-for="Name" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="CashBalance" class="control-label"></label>
-                <input asp-for="CashBalance" type="number" class="form-control" />
+                <label asp-for="CashBalance" class="control-label"><h3>Saldo gotówkowe</h3></label>
+                <input asp-for="CashBalance" type="number" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="CashBalance" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Zapisz" class="btn btn-outline-warning btn-lg" />
             </div>
         </form>
     </div>
 </div>
 
+<br>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót do listy</h6></a>
 </div>
 
 @section Scripts {

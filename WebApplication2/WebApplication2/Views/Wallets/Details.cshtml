@@ -4,25 +4,25 @@
     ViewData["Title"] = "Detale";
 }
 
-<h1>Detale</h1>
+<h1 class ="text-warning p-1">Detale</h1>
 
 <div>
-    <h4>Portfel</h4>
+    <h4 class="text-warning p-2">Portfele</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class = "col-sm-2 text-warning">
+            <h3>@Html.DisplayNameFor(model => model.Name)</h3>
         </dt>
     </dl>
 </div>
-<table class="table">
+<table class="text-warning table table-dark table-bordered border-warning">
     <thead>
         <tr>
             <th>
-                Nazwa
+                <h3>Nazwa</h3>
             </th>
             <th>
-                Ilość
+                <h3>Ilość</h3>
             </th>
         </tr>
     </thead>
@@ -30,15 +30,15 @@
 @foreach (var crypto in (Dictionary<string,float>)ViewData["cryptos"]) {
     <tr>
         <td>
-            @crypto.Key
+                    <h4> @crypto.Key</h4>
         </td>
         <td>
-            @crypto.Value
+                    <h4>@crypto.Value</h4>
         </td>
     </tr>
 }
 </tbody>
 </table>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót do listy</h6></a>
 </div>

@@ -4,29 +4,29 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1 class="text-warning p-1">Edytuj</h1>
 
-<h4>Wallet</h4>
+<h2 class ="text-warning p-2">Portfel</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label"><h3>Nazwa</h3></label>
+                <input asp-for="Name" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Zapisz" class="btn btn-outline-warning btn-lg" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót do listy</h6></a>
 </div>
 
 @section Scripts {

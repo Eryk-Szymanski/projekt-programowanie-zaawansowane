@@ -4,13 +4,13 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1 class="text-warning">Detale</h1>
 
 <div>
-    <h4>Transaction</h4>
+    <h4 class="text-warning">Transakcja</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-warning">
             @Html.DisplayNameFor(model => model.SenderWalletId)
         </dt>
         <dd class="col-sm-10">
@@ -31,5 +31,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="text-warning" asp-action="Index">Powrót do listy</a>
 </div>

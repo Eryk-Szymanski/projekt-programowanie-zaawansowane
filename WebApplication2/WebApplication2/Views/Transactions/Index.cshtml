@@ -4,62 +4,63 @@
     ViewData["Title"] = "Transfery";
 }
 
-<h1>Transfery</h1>
+<h1 class="text-warning">Transfery</h1>
 
 <p>
-    <a asp-action="Create">Nowy transfer</a>
+    <a class="text-warning" asp-action="Create"><h2 class="p-3">Nowy</h2></a>
 </p>
-<table class="table">
+<table class="text-warning table table-dark table-bordered border-warning">
     <thead>
         <tr>
-            <th>
+            <th class="col-md-2">
                 @Html.DisplayNameFor(model => model.SenderWalletId)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.RecipientId)
             </th>
-            <th>
+            <th class="col-md-2">
                 @Html.DisplayNameFor(model => model.RecipientWalletId)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.CryptoId)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.CryptoQuantity)
             </th>
-            <th>
+            <th class="col-md-3">
                 @Html.DisplayNameFor(model => model.Message)
             </th>
-            <th></th>
+            <th class="col-md-2"></th>
         </tr>
+
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @item.SenderWallet.Name
+                    @item.SenderWallet.Name
             </td>
             <td>
-                @item.Recipient.Email
+                    @item.Recipient.Email
             </td>
             <td>
-                @item.RecipientWallet.Name
+                    @item.RecipientWallet.Name
             </td>
             <td>
-                @item.Crypto.Name
+                    @item.Crypto.Name
             </td>
             <td>
-                @item.CryptoQuantity
+                    @item.CryptoQuantity
             </td>
             <td>
-                @item.Message
+                    <textarea class="form-control text-warning" style="resize:none;background:none;">@item.Message</textarea>
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="Details" asp-route-id="@item.Id">Detale</a>
                 @{
                         if ((bool)ViewData["IsAdmin"])
                         {
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="text-warning btn btn-sm border border-warning mx-2" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
                         }
                 }
             </td>

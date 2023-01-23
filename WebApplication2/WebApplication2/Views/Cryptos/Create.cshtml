@@ -4,43 +4,43 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Add</h1>
+<h1 class ="text-warning p-1">Dodaj</h1>
 
-<h4>Crypto Currency</h4>
-<hr />
+<h2 class ="text-warning p-2">Kryptowaluta</h2>
+<hr/>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label"><h3>Nazwa</h3></label>
+                <input asp-for="Name" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input type="text" asp-for="Description" class="form-control" />
+            </div> <br>
+            <div class="form-group ">
+                <label asp-for="Description" class="control-label"><h3>Opis</h3></label>
+                <input type="text" asp-for="Description" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+            </div> <br>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input type="number" asp-for="Value" class="form-control" />
+                <label asp-for="Value" class="control-label"><h3>Wartość</h3></label>
+                <input type="number" asp-for="Value" class="form-control bg-dark text-warning" />
                 <span asp-validation-for="Value" class="text-danger"></span>
-            </div>
+            </div> <br>
+
+            <div class="mb-3">
+                <label for="formFile" class="form-label"><h3>Wybierz zdjęcie</h3></label>
+                <input class="form-control bg-dark text-warning" type="file" name="file">
+            </div> <br>
             <div class="form-group">
-                <label asp-for="Image"></label>
-                <input asp-for="Image" type="file" name="file">
-                <span asp-validation-for="Image"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Upload" class="btn btn-primary" />
+                <input type="submit" value="Prześlij" class="btn btn-outline-warning btn-lg" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="text-warning" asp-action="Index"><h6 class="p-4">Powrót do listy</h6></a>
 </div>
 
 @section Scripts {

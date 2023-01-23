@@ -52,7 +52,7 @@ namespace WebApplication2.Controllers
                 await _signManager.SignOutAsync();
             }
 
-            return View("Index");
+            return View("Privacy");
         }
     }
 }
