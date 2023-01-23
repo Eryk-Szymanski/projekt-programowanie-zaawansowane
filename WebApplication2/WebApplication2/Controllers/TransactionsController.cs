@@ -117,6 +117,10 @@ namespace WebApplication2.Controllers
                         if (crypto1 != null)
                         {
                             crypto1.Quantity += transaction.CryptoQuantity;
+                        } else
+                        {
+                            crypto1 = new StoredCrypto(transaction.CryptoId, transaction.CryptoQuantity);
+                            recipientWallet.Cryptos.Add(crypto1);
                         }
                     }
                     else
