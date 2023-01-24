@@ -36,7 +36,7 @@ namespace WebApplication2.Controllers
                 {
                     foreach (var crypto in wallet.Cryptos)
                     {
-                        float cryptoValue = crypto.Quantity * _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Value).Single();
+                        float cryptoValue = crypto.Quantity * _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Value).SingleOrDefault();
                         walletValue += cryptoValue;
                     }
                 }
@@ -60,8 +60,11 @@ namespace WebApplication2.Controllers
             {
                 foreach (var crypto in wallet.Cryptos)
                 {
-                    string name = _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Name).Single();
-                    cryptos[name] = crypto.Quantity;
+                    string name = _context.Crypto.Where(c => c.Id == crypto.Id).Select(c => c.Name).SingleOrDefault();
+                    if (name != null)
+                    {
+                        cryptos[name] = crypto.Quantity;
+                    }
                 }
             }
             ViewData["cryptos"] = cryptos;
@@ -237,13 +240,18 @@ namespace WebApplication2.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Wallet'  is null.");
             }
-            var wallet = await _context.Wallet.FindAsync(id);
-            if (wallet != null)
+            try
             {
-                _context.Wallet.Remove(wallet);
+                var wallet = await _context.Wallet.FindAsync(id);
+                if (wallet != null)
+                {
+                    _context.Wallet.Remove(wallet);
+                }
+                await _context.SaveChangesAsync();
+            } catch
+            {
+
             }
-            
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Logowanie";
 }
 
 <h1 class ="text-warning">@ViewData["Title"]</h1>
@@ -10,7 +10,7 @@
     <div class="col-md-4 text-warning p-4 bg-warning  bg-opacity-10 rounded border border-warning">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h2>Użyj swojego konta, aby się zalogować.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
@@ -32,17 +32,17 @@
                     </div>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="btn btn-outline-warning btn-lg">Log in</button>
+                    <button id="login-submit" type="submit" class="btn btn-outline-warning btn-lg">Zaloguj</button>
                 </div><br />
                 <div>
                     <p>
-                        <a class="text-warning" id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a class="text-warning" id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
                     </p>
                     <p>
-                        <a class="text-warning" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a class="text-warning" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Zarejestruj się</a>
                     </p>
                     <p>
-                        <a class="text-warning" id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        <a class="text-warning" id="resend-confirmation" asp-page="./ResendEmailConfirmation">Potwierdź email</a>
                     </p>
                 </div>
             </form>

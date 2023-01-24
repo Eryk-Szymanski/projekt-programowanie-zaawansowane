@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gOSEjdukpJ7IM3JyxJaasbx6H7QMvDHTvxLEr8sdLws=",
+  "Hash": "wvMq0dC8Iy5N2FsuI3dEDkFIzFpeqKfA6wy6Mz2gzqE=",
   "Source": "WebApplication2",
   "BasePath": "_content/WebApplication2",
   "Mode": "Default",
@@ -2140,6 +2140,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\bitkon.png"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\uploads\\eth-diamond-black-white.jpg",
+      "SourceId": "WebApplication2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\",
+      "BasePath": "_content/WebApplication2",
+      "RelativePath": "uploads/eth-diamond-black-white.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\eth-diamond-black-white.jpg"
     },
     {
       "Identity": "C:\\Users\\Admin\\projects\\wsb-zajecia\\semestr5\\programowanie-zaawansowane\\projekt\\WebApplication2\\WebApplication2\\wwwroot\\uploads\\Solana_logo.png",

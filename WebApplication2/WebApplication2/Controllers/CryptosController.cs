@@ -142,6 +142,7 @@ namespace WebApplication2.Controllers
                 Wallet wallet = _context.Wallet.SingleOrDefault(w => w.Id == walletId);
                 if (wallet.CashBalance >= quantity * crypto.Value)
                 {
+                    bool cryptoInWallet = false;
                     wallet.CashBalance -= quantity * crypto.Value;
                     if (wallet.Cryptos == null)
                     {
@@ -149,7 +150,6 @@ namespace WebApplication2.Controllers
                     }
                     else
                     {
-                        bool cryptoInWallet = false;
                         foreach (var walletCrypto in wallet.Cryptos)
                         {
                             if (walletCrypto.Id == id)
@@ -158,10 +158,10 @@ namespace WebApplication2.Controllers
                                 walletCrypto.Quantity += quantity;
                             }
                         }
-                        if (!cryptoInWallet)
-                        {
-                            wallet.Cryptos.Add(new StoredCrypto(id, quantity));
-                        }
+                    }
+                    if (!cryptoInWallet)
+                    {
+                        wallet.Cryptos.Add(new StoredCrypto(id, quantity));
                     }
                     if (ModelState.IsValid)
                     {

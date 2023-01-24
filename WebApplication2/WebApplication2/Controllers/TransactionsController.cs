@@ -31,11 +31,11 @@ namespace WebApplication2.Controllers
             var transactions = _context.Transaction.Where(s => s.SenderId == _userManager.GetUserId(User) || s.RecipientId == _userManager.GetUserId(User));
             foreach(var transaction in transactions)
             {
-                transaction.Sender = _context.Users.Where(u => u.Id == transaction.SenderId).Single();
-                transaction.SenderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).Single();
-                transaction.Recipient = _context.Users.Where(u => u.Id == transaction.RecipientId).Single();
-                transaction.RecipientWallet= _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).Single();
-                transaction.Crypto = _context.Crypto.Where(c => c.Id == transaction.CryptoId).Single();
+                transaction.Sender = _context.Users.Where(u => u.Id == transaction.SenderId).SingleOrDefault();
+                transaction.SenderWallet = _context.Wallet.Where(w => w.Id == transaction.SenderWalletId).SingleOrDefault();
+                transaction.Recipient = _context.Users.Where(u => u.Id == transaction.RecipientId).SingleOrDefault();
+                transaction.RecipientWallet= _context.Wallet.Where(w => w.Id == transaction.RecipientWalletId).SingleOrDefault();
+                transaction.Crypto = _context.Crypto.Where(c => c.Id == transaction.CryptoId).SingleOrDefault();
             }
             ViewData["IsAdmin"] = User.IsInRole("Admin");
             return View(await transactions.ToListAsync());

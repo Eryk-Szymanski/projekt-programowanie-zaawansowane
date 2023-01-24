@@ -38,16 +38,32 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @if(item.SenderWallet != null) {
                     @item.SenderWallet.Name
+                } else {
+                    @item.SenderWalletId
+                }
             </td>
             <td>
+                @if(item.Recipient != null) {
                     @item.Recipient.Email
+                } else {
+                    @item.RecipientId
+                }
             </td>
             <td>
+                @if(item.RecipientWallet != null) {
                     @item.RecipientWallet.Name
+                } else {
+                    @item.RecipientWalletId
+                }
             </td>
             <td>
+                @if(item.Crypto != null) {
                     @item.Crypto.Name
+                } else {
+                    @item.CryptoId
+                }
             </td>
             <td>
                     @item.CryptoQuantity
